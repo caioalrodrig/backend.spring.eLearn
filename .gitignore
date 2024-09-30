@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+/src/main/java/com/crud/pgsql/crud_pgsql/model/User.java
+
+compose.yaml
