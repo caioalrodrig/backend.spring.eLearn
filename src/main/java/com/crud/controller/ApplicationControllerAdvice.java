@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.exception.RecordNotFoundException;
+import com.crud.exception.RecordNotFoundException;
 
 @RestControllerAdvice()
 public class ApplicationControllerAdvice {
@@ -16,4 +16,10 @@ public class ApplicationControllerAdvice {
   public String handleException(RecordNotFoundException ex){
     return ex.getMessage();
   }
+
+  // @ExceptionHandler(CredentialMismatchException.class)
+  // @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  // public String handleSigninException(CredentialMismatchException ex){
+  //   return ex.getMessage();
+  // }
 }

@@ -12,8 +12,8 @@ import jakarta.validation.constraints.Positive;
 
 import com.crud.dto.CourseDTO;
 import com.crud.dto.mapper.CourseMapper;
+import com.crud.exception.RecordNotFoundException;
 import com.crud.repository.CourseRepository;
-import com.exception.RecordNotFoundException;
 
 @Validated
 @Service

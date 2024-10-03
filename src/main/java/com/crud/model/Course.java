@@ -8,12 +8,9 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Data;
-import lombok.Setter;
-import lombok.Getter;
+
 
 @Data
-@Getter
-@Setter
 @Entity
 public class Course {
 
