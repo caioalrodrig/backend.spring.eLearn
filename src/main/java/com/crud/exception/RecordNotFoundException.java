@@ -1,4 +1,4 @@
-package com.exception;
+package com.crud.exception;
 
 public class RecordNotFoundException extends RuntimeException{
 
