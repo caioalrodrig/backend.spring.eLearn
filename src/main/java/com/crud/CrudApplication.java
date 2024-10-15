@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.crud.model.Course;
 import com.crud.repository.CourseRepository;
+import com.crud.repository.UserRepository;
 
 
 @SpringBootApplication
@@ -18,7 +19,7 @@ public class CrudApplication {
 	}
 
 	@Bean
-	CommandLineRunner initDatabase(CourseRepository courseRepository){
+	CommandLineRunner initDatabase(CourseRepository courseRepository, UserRepository userRepository){
 		return args -> {
 			courseRepository.deleteAll();
 			Course c = new Course();
@@ -27,6 +28,9 @@ public class CrudApplication {
 			c.setStatus("Ativo");
 
 			courseRepository.save(c);
+
+			userRepository.deleteAll();
+
 		};
 	}
 }
