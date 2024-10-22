@@ -34,11 +34,7 @@ build/
 
 /src/main/resources/application-dev.properties
 
-/src/main/java/com/crud/config/authorization/
-
-/src/main/java/com/crud/config/SecurityProperties.java
-
-/src/main/java/com/crud/config/oauth2/OAuth2AuthenticationSuccessHandler.java
+/src/main/java/com/crud/config/token/
 
 /src/main/java/com/crud/util/CookieUtils.java
 

@@ -5,15 +5,13 @@ import java.util.Map;
 
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
-// import org.springframework.security.core.GrantedAuthority;
-// import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import com.crud.exception.ProcessingException;
+import com.crud.exception.ProcessingOAuth2ServiceException;
 import com.crud.model.user.User;
 import com.crud.model.user.UserProvider;
 import com.crud.model.user.UserAuthority;
@@ -46,7 +44,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     Map<String, Object> oAuth2UserInfo = oAuth2User.getAttributes();
 
     if (oAuth2UserInfo.get("email") == null) {
-      throw new ProcessingException("Email not found from OAuth2 provider");
+      throw new ProcessingOAuth2ServiceException();
     }
 
     Optional<User> userOptional = userRepository.findByEmail((String) oAuth2UserInfo.get("email"));
@@ -55,8 +53,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
       user = userOptional.get();
       if (!user.getProvider().equals(UserProvider.valueOf(
           oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
-        throw new ProcessingException("Looks like you're signed up with " +
-          user.getProvider() + " account. Please use it to login.");
+        throw new ProcessingOAuth2ServiceException(user.getProvider());
       }
       user = updateExistingUser(user, oAuth2UserInfo);
       } else {
@@ -69,7 +66,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     User user = new User();
     user.setProvider(UserProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
-    user.setId((String)oAuth2UserInfo.get("sub"));
+    user.setProviderId((String)oAuth2UserInfo.get("sub"));
     user.setName((String)oAuth2UserInfo.get("name"));
     user.setEmail((String)oAuth2UserInfo.get("email"));
     user.setImageUrl((String)oAuth2UserInfo.get("picture"));

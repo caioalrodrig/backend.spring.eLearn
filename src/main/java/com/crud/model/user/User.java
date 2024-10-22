@@ -6,6 +6,7 @@ import java.util.Map;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -18,15 +19,20 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import lombok.Data;
 
 @Data
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {
+  @UniqueConstraint(columnNames = "email")
+})
 @Entity
 public class User implements OAuth2User {
 
   @Id
-  private String id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   @Column(nullable = false)
   @NotBlank
@@ -45,12 +51,14 @@ public class User implements OAuth2User {
   @Enumerated(EnumType.STRING)
   private UserAuthority authority; 
 
+  private transient Collection<? extends GrantedAuthority> authorities; 
   private transient Map<String, Object> attributes;
   private transient String imageUrl;
+  private transient String providerId;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Collections.singletonList(new SimpleGrantedAuthority(authority.name()));
+    return this.authorities;
   }
 
   @Override
@@ -60,10 +68,12 @@ public class User implements OAuth2User {
 
   public void setAttributes(Map<String, Object> attributes) {
     this.attributes = attributes;
+    this.authorities = Collections
+      .singletonList(new SimpleGrantedAuthority("USER"));
   }
 
   @Override
   public String getName() {
-    return id;
+    return providerId;
   }
 }
