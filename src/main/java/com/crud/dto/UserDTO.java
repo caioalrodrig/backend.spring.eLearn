@@ -4,5 +4,6 @@ public record UserDTO(
     Long id,
     String email,
     String status,
-    String role) {
+    String role,
+    String token) {
 }

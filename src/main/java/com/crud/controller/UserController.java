@@ -13,11 +13,10 @@ import com.crud.dto.UserDTO;
 import com.crud.service.UserService;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/auth")
 public class UserController {
 
   private final UserService userService;
-
   public UserController(UserService userService){
     this.userService = userService;
   }
@@ -31,7 +30,7 @@ public class UserController {
 
   @PostMapping("/signin")
   public UserDTO userSignin(@RequestBody SigninDTO signinDTO){
-
-    return userService.signin(signinDTO);
+  
+    return userService.signin(signinDTO); 
   }
 }

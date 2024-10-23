@@ -10,10 +10,11 @@ import com.crud.dto.SigninDTO;
 import com.crud.dto.SignupDTO;
 import com.crud.dto.UserDTO;
 import com.crud.dto.mapper.SignupMapper;
-// import com.crud.dto.mapper.SigninMapper;
 import com.crud.dto.mapper.UserMapper;
-import com.crud.model.User;
+import com.crud.exception.DuplicateUserException;
+import com.crud.model.user.User;
 import com.crud.repository.UserRepository;
+import com.crud.util.TokenService;
 
 import jakarta.validation.Valid;
 
@@ -26,27 +27,34 @@ public class UserService {
 
   private final UserRepository userRepository;
   private final SignupMapper signupMapper;
+  private final TokenService tokenService;
   private final UserMapper userMapper;
-  // private final SigninMapper signinMapper;
 
   public UserService(UserRepository userRepository,
       SignupMapper signupMapper,
-      UserMapper userMapper) {
+      UserMapper userMapper,
+      TokenService tokenService) {
     this.userRepository = userRepository;
     this.signupMapper = signupMapper;
     this.userMapper = userMapper;
-    // this.signinMapper = signinMapper;
+    this.tokenService = tokenService;
   }
 
   public UserDTO create(@Valid SignupDTO signupDTO) {
-
-    return userMapper.toDTO(userRepository.save(signupMapper.toEntity(signupDTO)));
+    try{
+      return userMapper.toDTO(userRepository.save(signupMapper.toEntity(signupDTO)), "");
+    } catch (Exception e){
+      throw new DuplicateUserException();
+    }
   }
 
   public UserDTO signin(@Valid SigninDTO signinDTO) {
+    
     var auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinDTO.email(),
-        signinDTO.password()));
+      signinDTO.password()));
 
-    return userMapper.toDTO((User) auth.getPrincipal());
+    String token = tokenService.createToken(auth);
+    
+    return userMapper.toDTO((User) auth.getPrincipal(), token);
   }
 }

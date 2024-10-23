@@ -1,4 +1,4 @@
-package com.crud.config.security;
+package com.crud.config.auth;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,11 +11,11 @@ import com.crud.repository.UserRepository;
 
 @Validated
 @Service
-public class AuthService implements UserDetailsService{
+public class CustomUserDetailsService implements UserDetailsService{
   
   private final UserRepository userRepository;
 
-  public AuthService(UserRepository userRepository){
+  public CustomUserDetailsService(UserRepository userRepository){
     this.userRepository = userRepository;
   }
 

@@ -34,4 +34,6 @@ build/
 
 /src/main/java/com/crud/pgsql/crud_pgsql/model/User.java
 
+/src/main/resources/application-dev.properties
+
 compose.yaml

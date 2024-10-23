@@ -1,4 +1,4 @@
-package com.crud.model;
+package com.crud.model.user;
 
 import java.util.Collection;
 import java.util.List;

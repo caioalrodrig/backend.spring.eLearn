@@ -4,7 +4,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.crud.dto.SignupDTO;
-import com.crud.model.User;
+import com.crud.model.user.User;
 
 @Component
 public class SignupMapper {
@@ -15,7 +15,7 @@ public class SignupMapper {
     }
 
     User user = new User();
-    if (signupDTO.id() != null) { //talvez desnecessario
+    if (signupDTO.id() != null) { 
       user.setId(signupDTO.id());
     }
 
