@@ -63,7 +63,7 @@
       <artifactId>mysql-connector-j</artifactId>
       <scope>9.0.1</scope>
     </dependency>
-			<dependency>
+		<dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-oauth2-client</artifactId>
     </dependency>

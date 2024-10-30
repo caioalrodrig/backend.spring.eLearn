@@ -25,6 +25,8 @@ public class CrudApplication {
 	CommandLineRunner initDatabase(CourseRepository courseRepository, UserRepository userRepository){
 		return args -> {
 			courseRepository.deleteAll();
+			userRepository.deleteAll();
+
 			Course c = new Course();
 			c.setName("Angular com Go");
 			c.setCategory("full stack");

@@ -40,4 +40,6 @@ build/
 
 /src/main/java/com/crud/service/UserService.java
 
+/src/main/resources/application-dev.properties
+
 compose.yaml
