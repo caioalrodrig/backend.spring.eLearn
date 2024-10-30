@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import jakarta.persistence.Column;
@@ -28,7 +29,7 @@ import lombok.Data;
   @UniqueConstraint(columnNames = "email")
 })
 @Entity
-public class User implements OAuth2User {
+public class User implements OAuth2User, UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,10 +41,10 @@ public class User implements OAuth2User {
   private String name;
 
   @Column(nullable = false, unique = true)
-  @Email
+  @Email(message = "Invalid email format")
   private String email;
 
-  @Column(nullable = false)
+  @Column
   @Enumerated(EnumType.STRING)
   private UserProvider provider;
 
@@ -56,6 +57,13 @@ public class User implements OAuth2User {
   private transient String imageUrl;
   private transient String providerId;
 
+  @Column
+  private String password;
+
+  @Column(nullable = false, length = 15)
+  @Enumerated(EnumType.STRING)
+  private UserStatus status;
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return this.authorities;
@@ -66,6 +74,11 @@ public class User implements OAuth2User {
     return attributes;
   }
 
+  @Override
+  public String getName() {
+    return name;
+  }
+
   public void setAttributes(Map<String, Object> attributes) {
     this.attributes = attributes;
     this.authorities = Collections
@@ -73,7 +86,33 @@ public class User implements OAuth2User {
   }
 
   @Override
-  public String getName() {
-    return providerId;
+  public String getPassword() {
+    return password;
   }
+
+  @Override
+  public String getUsername() {
+    return email;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
+  
 }

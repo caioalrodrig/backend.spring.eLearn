@@ -5,7 +5,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import com.crud.config.AppProperties;
-import com.crud.config.jwt.TokenService;
+import com.crud.util.TokenService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.crud.model.user.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
   Optional<User> findByEmail(String email);
 
