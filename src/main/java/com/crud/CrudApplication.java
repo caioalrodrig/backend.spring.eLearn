@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 
 import com.crud.config.AppProperties;
 import com.crud.model.Course;
-import com.crud.model.user.User;
 import com.crud.repository.CourseRepository;
 import com.crud.repository.UserRepository;
 
@@ -35,14 +34,8 @@ public class CrudApplication {
 
 			courseRepository.save(c);
 
-			User u = new User();
-			u.setName("Caio Jr");
-			u.setEmail("caio@caio.com");
-			u.setPassword("caiao123");
-			u.setStatus("Not-confirmed");
-			u.setRole("User");
+			userRepository.deleteAll();
 
-			userRepository.save(u);
 		};
 	}
 }

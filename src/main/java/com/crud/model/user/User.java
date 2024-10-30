@@ -1,65 +1,93 @@
 package com.crud.model.user;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
+import java.util.Map;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {
+  @UniqueConstraint(columnNames = "email")
+})
 @Entity
-@EqualsAndHashCode(of = {"id", "password"})
-public class User implements UserDetails{
+public class User implements OAuth2User, UserDetails {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(nullable = false)
   @NotBlank
   @Length(min = 2, max = 120)
-  @JsonIgnore
   private String name;
 
   @Column(nullable = false, unique = true)
   @Email(message = "Invalid email format")
   private String email;
 
+  @Column
+  @Enumerated(EnumType.STRING)
+  private UserProvider provider;
+
   @Column(nullable = false)
-  @NotBlank
-  @Length(min = 8)
+  @Enumerated(EnumType.STRING)
+  private UserAuthority authority; 
+
+  private transient Collection<? extends GrantedAuthority> authorities; 
+  private transient Map<String, Object> attributes;
+  private transient String imageUrl;
+  private transient String providerId;
+
+  @Column
   private String password;
 
   @Column(nullable = false, length = 15)
-  @Pattern(regexp = "Active|Inactive|Not-confirmed")
-  private String status;
-
-  @Column(nullable = false, length = 15)
-  @Pattern(regexp = "Admin|User")
-  private String role;
+  @Enumerated(EnumType.STRING)
+  private UserStatus status;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    if(this.role == "Admin") return List.of(new SimpleGrantedAuthority("Admin"), new SimpleGrantedAuthority("User"));
-    return List.of(new SimpleGrantedAuthority("User"));
+    return this.authorities;
+  }
+
+  @Override
+  public Map<String, Object> getAttributes() {
+    return attributes;
+  }
+
+  @Override
+  public String getName() {
+    return name;
+  }
+
+  public void setAttributes(Map<String, Object> attributes) {
+    this.attributes = attributes;
+    this.authorities = Collections
+      .singletonList(new SimpleGrantedAuthority("USER"));
+  }
+
+  @Override
+  public String getPassword() {
+    return password;
   }
 
   @Override
@@ -86,4 +114,5 @@ public class User implements UserDetails{
   public boolean isEnabled() {
     return true;
   }
+  
 }

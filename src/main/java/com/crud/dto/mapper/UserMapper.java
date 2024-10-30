@@ -9,7 +9,14 @@ import com.crud.model.user.User;
 public class UserMapper{
 
   public UserDTO toDTO(User user, String token){
-    return new UserDTO(user.getId(), user.getName(), user.getStatus(), user.getRole(), token);
+    return new UserDTO(user.getId(), 
+            user.getName(), 
+            user.getEmail(), 
+            user.getStatus(),
+            user.getProvider(),
+            user.getAuthority(),
+            user.getImageUrl(),
+            token);
   }
-
+  
 }

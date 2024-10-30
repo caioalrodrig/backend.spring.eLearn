@@ -49,7 +49,7 @@ public class TokenService {
       .parseClaimsJws(token)
       .getBody();
 
-    return Long.parseLong(claims.getSubject());
+    return Long.parseLong(claims.getSubject()); 
   }
 
   public boolean validateToken(String token) {

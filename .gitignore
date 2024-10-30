@@ -32,7 +32,13 @@ build/
 ### VS Code ###
 .vscode/
 
-/src/main/java/com/crud/pgsql/crud_pgsql/model/User.java
+/src/main/resources/application-dev.properties
+
+/src/main/java/com/crud/config/token/
+
+/src/main/java/com/crud/util/CookieUtils.java
+
+/src/main/java/com/crud/service/UserService.java
 
 /src/main/resources/application-dev.properties
 
