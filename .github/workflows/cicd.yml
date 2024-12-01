@@ -1,0 +1,46 @@
+name: Build, Push and Deploy to GCP
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: us-central1
+  GAR_LOCATION: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/auth-spring/
+
+jobs:
+  build-and-push:
+    name: Build && Push && Deploy
+    environment: gcp-env
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.3.0
+        with:
+          service_account_email: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+          export_default_credentials: true
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+     
+      - name: Configure Docker
+        uses: docker/login-action@v2
+        with:
+          registry: us-central1-docker.pkg.dev
+          username: _json_key
+          password: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/auth-spring/auth-spring -f Dockerfile .
+      
+      - name: Push Docker image to Artifact Registry
+        run: |
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/auth-spring/auth-spring
+      
+      - name: Deploy to Cloud Run
+        run: gcloud run deploy auth-spring --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/auth-spring/auth-spring --platform managed --region us-central1 --concurrency 1 --min-instances 1 --max-instances 1 --port 8080 --allow-unauthenticated --set-secrets=SPRING_PROFILES_ACTIVE=SPRING_PROFILES_ACTIVE:latest,DATASOURCE_URL=DATASOURCE_URL:latest,DATASOURCE_PASSWORD=DATASOURCE_PASSWORD:latest,DATASOURCE_USERNAME=DATASOURCE_USERNAME:latest
