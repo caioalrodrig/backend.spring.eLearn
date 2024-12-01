@@ -27,6 +27,7 @@ public class SignupMapper {
 
     user.setName(signupDTO.name());
     user.setEmail(signupDTO.email());
+    user.setProvider(UserProvider.local);
     user.setPassword(new BCryptPasswordEncoder().encode(signupDTO.password()));
     user.setStatus(UserStatus.enabled);
     user.setAuthority(UserAuthority.USER);
