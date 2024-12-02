@@ -43,20 +43,14 @@ jobs:
           docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/auth-spring/auth-spring
       
       - name: Deploy to Cloud Run
-      - run: gcloud run deploy auth-spring \
-         --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/auth-spring/auth-spring \
-         --platform managed \
-         --region us-central1 \
-         --concurrency 1 \
-         --min-instances 1 \
-         --max-instances 1 \
-         --port 8080 \
-         --allow-unauthenticated \
-         --set-secrets=SPRING_PROFILES_ACTIVE=SPRING_PROFILES_ACTIVE:latest,\
-          DATASOURCE_URL=DATASOURCE_URL:latest,\
-          DATASOURCE_PASSWORD=DATASOURCE_PASSWORD:latest,\
-          DATASOURCE_USERNAME=DATASOURCE_USERNAME:latest,\
-          TOKEN_SECRET=TOKEN_SECRET:latest,\
-          SUCCESS_AUTH_REDIRECT_URL=SUCCESS_AUTH_REDIRECT_URL:latest,\
-          OAUTH2_GOOGLE_CLIENT_ID=OAUTH2_GOOGLE_CLIENT_ID:latest,\
-          OAUTH2_GOOGLE_CLIENT_SECRET=OAUTH2_GOOGLE_CLIENT_SECRET:latest
+        run: |
+          gcloud run deploy auth-spring \
+            --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/auth-spring/auth-spring \
+            --platform managed \
+            --region us-central1 \
+            --concurrency 1 \
+            --min-instances 1 \
+            --max-instances 1 \
+            --port 8080 \
+            --allow-unauthenticated \
+            --set-secrets=SPRING_PROFILES_ACTIVE=SPRING_PROFILES_ACTIVE:latest,DATASOURCE_URL=DATASOURCE_URL:latest,DATASOURCE_PASSWORD=DATASOURCE_PASSWORD:latest,DATASOURCE_USERNAME=DATASOURCE_USERNAME:latest,TOKEN_SECRET=TOKEN_SECRET:latest,SUCCESS_AUTH_REDIRECT_URL=SUCCESS_AUTH_REDIRECT_URL:latest,OAUTH2_GOOGLE_CLIENT_ID=OAUTH2_GOOGLE_CLIENT_ID:latest,OAUTH2_GOOGLE_CLIENT_SECRET=OAUTH2_GOOGLE_CLIENT_SECRET:latest
