@@ -33,23 +33,32 @@ public class UserService {
   private final SignupMapper signupMapper;
   private final TokenService tokenService;
   private final UserMapper userMapper;
+  private final EmailService emailService;
 
   public UserService(UserRepository userRepository,
       SignupMapper signupMapper,
       UserMapper userMapper,
-      TokenService tokenService) {
+      TokenService tokenService,
+      EmailService emailService) {
     this.userRepository = userRepository;
     this.signupMapper = signupMapper;
     this.userMapper = userMapper;
     this.tokenService = tokenService;
+    this.emailService = emailService;
   }
 
   public UserDTO create(@Valid SignupDTO signupDTO) {
     try{
-      return userMapper.toDTO(userRepository.save(signupMapper.toEntity(signupDTO)), "");
+      User user = userRepository.save(signupMapper.toEntity(signupDTO));
+      UserDTO userDTO = userMapper.toDTO(user, "");
+      
+      emailService.create(user);
+
+      return userDTO;
     } catch (Exception e){
       throw new DuplicateUserException();
     }
+
   }
 
   public UserDTO signin(@Valid SigninDTO signinDTO) {
@@ -61,11 +70,11 @@ public class UserService {
     }
 
     try{
-      var auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinDTO.email(),
-      signinDTO.password()));
+      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinDTO.email(), 
+       signinDTO.password()));
 
-      String token = tokenService.createToken(auth);
-      return userMapper.toDTO((User) auth.getPrincipal(), token);    
+      String token = tokenService.createToken(foundUser.getId());
+      return userMapper.toDTO(foundUser, token);    
     } catch (Exception e){
       throw new InvalidUsernamePasswordException(null);
     } 

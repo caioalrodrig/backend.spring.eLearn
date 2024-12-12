@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {
   private final Auth auth = new Auth();
+  private final App app = new App();
 
   public static class Auth {
     private String tokenSecret;
@@ -36,8 +37,24 @@ public class AppProperties {
     }
   }
 
+  public static class App{
+    public String apiUrl;
+
+    public String getApiUrl(){
+      return apiUrl;
+    }
+
+    public void setRedirectUrl(String apiUrl) {
+      this.apiUrl = apiUrl;
+    }
+  }
+
   public Auth getAuth() {
     return auth;
+  }
+
+  public App getApp() {
+    return app;
   }
 
 }

@@ -29,7 +29,7 @@ public class SignupMapper {
     user.setEmail(signupDTO.email());
     user.setProvider(UserProvider.local);
     user.setPassword(new BCryptPasswordEncoder().encode(signupDTO.password()));
-    user.setStatus(UserStatus.enabled);
+    user.setStatus(UserStatus.notConfirmed);
     user.setAuthority(UserAuthority.USER);
     return user;
   }
@@ -45,7 +45,7 @@ public class SignupMapper {
     user.setEmail((String)oAuth2UserInfo.get("email"));
     user.setImageUrl((String)oAuth2UserInfo.get("picture"));
     user.setAttributes(oAuth2UserInfo);
-    user.setStatus(UserStatus.enabled);
+    user.setStatus(UserStatus.notConfirmed);
     user.setAuthority(UserAuthority.USER); 
 
     return user;

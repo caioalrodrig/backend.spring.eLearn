@@ -1,4 +1,4 @@
-package com.crud.pgsql.crud_pgsql;
+package com.crud;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Import;
 import com.crud.dto.SignupDTO;
 import com.crud.dto.mapper.SignupMapper;
 import com.crud.model.user.User;
+import com.crud.model.user.UserProvider;
 import com.crud.repository.UserRepository;
 
 import java.util.Optional;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import(SignupMapper.class)
-public class AuthIntegrationTests {
+public class UserTests {
 
 	@Autowired
 	private TestEntityManager entityManager;
@@ -54,6 +55,16 @@ public class AuthIntegrationTests {
 		assertThat(found).isPresent().hasValueSatisfying(user -> 
 			assertThat(user.getEmail()).isNotEqualTo("pedro@gmail.com")
 		);				
+	}
+
+	@Test
+	public void whenBasicSignup_thenOAuth2UserInfoIsNull() {
+		
+		Optional<User> found = userRepository.findByEmail(jose.getEmail());
+		assertThat(found).isPresent().hasValueSatisfying(user -> {
+			assertThat(user.getProvider()).isEqualTo(UserProvider.local);
+			assertThat(user.getImageUrl()).isBlank();
+		});				
 	}
 
 }

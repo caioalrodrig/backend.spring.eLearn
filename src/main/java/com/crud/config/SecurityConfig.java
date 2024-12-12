@@ -52,6 +52,8 @@ public class SecurityConfig {
       .authorizeHttpRequests(registry -> {
         registry.requestMatchers("/oauth2/**").permitAll();
         registry.requestMatchers("/auth/**").permitAll();
+        registry.requestMatchers("/verify/**").permitAll();
+
         registry.anyRequest().authenticated();
       })
       .oauth2Login(oauth2login -> {
@@ -80,8 +82,8 @@ public class SecurityConfig {
       .authorizeHttpRequests( auth -> {
         auth.requestMatchers(AntPathRequestMatcher.antMatcher("/auth/**")).permitAll();
         auth.requestMatchers(HttpMethod.OPTIONS,"/**").permitAll();
-        auth.requestMatchers(HttpMethod.POST, "auth/signin").permitAll();
-        auth.requestMatchers(HttpMethod.POST, "auth/signup").permitAll();
+        auth.requestMatchers(HttpMethod.POST, "/auth/signin").permitAll();
+        auth.requestMatchers(HttpMethod.POST, "/auth/signup").permitAll();
       })
       .build();
   }

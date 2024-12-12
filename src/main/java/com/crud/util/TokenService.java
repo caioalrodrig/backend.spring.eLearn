@@ -1,14 +1,12 @@
 package com.crud.util;
 
 import com.crud.config.AppProperties;
-import com.crud.model.user.User;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -29,12 +27,11 @@ public class TokenService {
     this.expTime = this.appProperties.getAuth().getTokenExpirationMsec();
   }
 
-  public String createToken(Authentication authentication) {
+  public String createToken(Long userId) {
 
-    User userPrincipal = (User) authentication.getPrincipal();
     Date now = new Date();
     return Jwts.builder()
-      .setSubject(Long.toString(userPrincipal.getId()))
+      .setSubject(Long.toString(userId))
       .setIssuedAt(now)
       .setExpiration(new Date(now.getTime() + expTime))
       .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes())) 

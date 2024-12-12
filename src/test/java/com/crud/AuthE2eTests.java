@@ -1,4 +1,4 @@
-package com.crud.pgsql.crud_pgsql;
+package com.crud;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.crud.CrudApplication;
 import com.crud.dto.SignupDTO;
 import com.crud.model.user.User;
 import com.crud.model.user.UserAuthority;

@@ -5,6 +5,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import com.crud.config.AppProperties;
+import com.crud.model.user.User;
 import com.crud.util.TokenService;
 
 import jakarta.servlet.ServletException;
@@ -32,7 +33,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     
-    String token = tokenService.createToken(authentication);
+    String token = tokenService.createToken(((User)authentication.getPrincipal()).getId());
 
     String redirectUrl = this.redirectUrl + "?token=" + URLEncoder.encode(token, StandardCharsets.UTF_8.name());
 
