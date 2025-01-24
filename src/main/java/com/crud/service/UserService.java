@@ -20,7 +20,7 @@ import com.crud.model.user.UserProvider;
 import com.crud.repository.UserRepository;
 import com.crud.util.TokenService;
 
-import jakarta.transaction.Transactional;
+// import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @Validated
@@ -48,7 +48,7 @@ public class UserService {
     this.emailService = emailService;
   }
 
-  @Transactional
+  // @Transactional
   public UserDTO create(@Valid SignupDTO signupDTO) {
     try{
       User user = userRepository.save(signupMapper.toEntity(signupDTO));
