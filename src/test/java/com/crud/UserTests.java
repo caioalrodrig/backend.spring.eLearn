@@ -34,7 +34,7 @@ public class UserTests {
 
 	@BeforeEach
 	public void setUp() {
-		SignupDTO joseDTO = new SignupDTO(null, "jose", "jose@gmail.com", "jose1234");
+		SignupDTO joseDTO = new SignupDTO(null, "jose", "jose@gmail.com.br", "jose1234");
 		jose = signupMapper.toEntity(joseDTO);
 		entityManager.persistAndFlush(jose);
 	}

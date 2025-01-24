@@ -1,11 +1,13 @@
 package com.crud.dto;
 
+import java.util.UUID;
+
 import com.crud.model.user.UserAuthority;
 import com.crud.model.user.UserProvider;
 import com.crud.model.user.UserStatus;
 
 public record UserDTO(
-    Long id,
+    UUID id,
     String name,
     String email,
     UserStatus status,

@@ -1,5 +1,7 @@
 package com.crud.util;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import com.crud.model.user.User;
@@ -21,7 +23,7 @@ public class EnableUserService {
       return false;
     }
 
-    Long userId = tokenService.getUserIdFromToken(token);
+    UUID userId = tokenService.getUserIdFromToken(token);
     
     User user = userRepository.findById(userId)
       .orElseThrow(() -> new RuntimeException());

@@ -18,14 +18,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(uniqueConstraints = {
-    @UniqueConstraint(columnNames = "user_id")
-})
+@Table
 public class Email implements Serializable{
   private static final long serialVersionUID = 1L;
   
@@ -34,7 +31,7 @@ public class Email implements Serializable{
   private UUID id;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "user_id", nullable = false)
+  @JoinColumn(name = "user_id")
   private User user;
 
   @Column(nullable = false)

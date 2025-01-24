@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class TokenService {
@@ -27,18 +28,18 @@ public class TokenService {
     this.expTime = this.appProperties.getAuth().getTokenExpirationMsec();
   }
 
-  public String createToken(Long userId) {
+  public String createToken(UUID userId) {
 
     Date now = new Date();
     return Jwts.builder()
-      .setSubject(Long.toString(userId))
+      .setSubject(userId.toString())
       .setIssuedAt(now)
       .setExpiration(new Date(now.getTime() + expTime))
       .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes())) 
       .compact();
   }
 
-  public Long getUserIdFromToken(String token) {
+  public UUID getUserIdFromToken(String token) {
 
     Claims claims = Jwts.parserBuilder()
       .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
@@ -46,7 +47,7 @@ public class TokenService {
       .parseClaimsJws(token)
       .getBody();
 
-    return Long.parseLong(claims.getSubject()); 
+    return UUID.fromString(claims.getSubject()); 
   }
 
   public boolean validateToken(String token) {

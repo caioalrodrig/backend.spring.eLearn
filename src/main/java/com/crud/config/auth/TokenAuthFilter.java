@@ -1,6 +1,7 @@
 package com.crud.config.auth;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ public class TokenAuthFilter extends OncePerRequestFilter {
         String jwt = getJwtFromRequest(request);
 
         if (StringUtils.hasText(jwt) && tokenService.validateToken(jwt)) {
-          Long userId = tokenService.getUserIdFromToken(jwt);
+          UUID userId = tokenService.getUserIdFromToken(jwt);
 
           Optional<User> oAuth2User = userRepository.findById(userId);
           if (oAuth2User.isPresent()) {

@@ -3,6 +3,7 @@ package com.crud.model.user;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -32,8 +33,8 @@ import lombok.Data;
 public class User implements OAuth2User, UserDetails {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
 
   @Column(nullable = false)
   @NotBlank
